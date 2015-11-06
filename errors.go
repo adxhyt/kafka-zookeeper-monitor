@@ -21,3 +21,5 @@ var ErrPusherDataErr = errors.New("pusher http response: fetch kafka-pusher data
 var ErrPusherEmptyData = errors.New("pusher http response: fetch kafka-pusher data is empty with 200 http code")
 
 var ErrTrackerServiceSuspend = errors.New("pusher http response: service suspend. tracker data unchanged for 1 hour")
+
+var ErrKazooGetConsumerGroups = errors.New("kazoo client get consumer group err")

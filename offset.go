@@ -97,27 +97,33 @@ func (this *OffsetWorker) GetConsumerGroupsOffsetDistance() (map[string]map[stri
 
 	groups, err := kazooClient.Consumergroups()
 	if nil != err {
-		return nil, err
+		return nil, ErrKazooGetConsumerGroups
 	}
 
 	for _, group := range groups {
 		groupItem := map[string]map[string]int64{}
 		topics, err := group.Topics()
 		if nil != err {
-			return nil, err
+			errMsg := fmt.Sprintf("[Distance Err KAZOO_GET_TOPIC_ERR] cg:%v", group.Name)
+			AddLogger(this.Err_file, errMsg, err)
+			continue
 		}
 		for _, topic := range topics {
 			topicItem := map[string]int64{}
 			partitions, err := topic.Partitions()
 			if nil != err {
-				return nil, err
+				errMsg := fmt.Sprintf("[Distance Err KAZOO_GET_PARTITION_ERR] cg:%v, topic:%v", group.Name, topic.Name)
+				AddLogger(this.Err_file, errMsg, err)
+				continue
 			}
 			var distance_total, distance int64
 			distance_total = 0
 			for _, partition := range partitions {
 				offset, err := group.FetchOffset(topic.Name, partition.ID)
 				if nil != err {
-					return nil, err
+					errMsg := fmt.Sprintf("[Distance Err KAZOO_GET_OFFSET_ERR] cg:%v, topic:%v, partition:%v", group.Name, topic.Name, partition.ID)
+					AddLogger(this.Err_file, errMsg, err)
+					continue
 				}
 				partition_str := fmt.Sprintf("%d", partition.ID)
 				distance = latest_offset[topic.Name][partition_str] - offset

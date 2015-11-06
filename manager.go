@@ -57,12 +57,12 @@ func (this *Manager) Work() error {
 	var data []LogData
 	kafkaOffset, err := this.Worker.GetLastOffset()
 	if nil != err {
-		AddLogger(this.Err_file, "[Distance Err MAN_KAFKA_WORKER_ERR]", err)
+		AddLogger(this.Err_file, "[Distance Err KAFKA_WORKER_ERR]", err)
 		return err
 	}
 	zkOffset, err := this.Worker.GetConsumerGroupsOffsetDistance()
 	if nil != err {
-		AddLogger(this.Err_file, "[Distance Err MAN_ZK_WORKER_ERR]", err)
+		AddLogger(this.Err_file, "[Distance Err ZK_WORKER_ERR]", err)
 		return err
 	}
 
