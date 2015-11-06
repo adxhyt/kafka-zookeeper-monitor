@@ -8,10 +8,9 @@ import (
 )
 
 type Manager struct {
-	Worker       *OffsetWorker
-	PusherGeters []*PusherGeter
-	Zookeepers   []string
-	ZkCluster    string
+	Worker     *OffsetWorker
+	Zookeepers []string
+	ZkCluster  string
 
 	Logger_file   string
 	Monitor_file  string
