@@ -131,7 +131,7 @@ func (this *Manager) GetPassbyFilter() map[string]map[string]map[string]int {
 			t = map[string]int{}
 			g[value.ConsumerGroup] = t
 		}
-		value, ok := t[value.Topic]
+		_, ok = t[value.Topic]
 		if !ok {
 			t[value.Topic] = 1
 		}
