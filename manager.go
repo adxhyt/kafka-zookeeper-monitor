@@ -47,12 +47,7 @@ func (this *Manager) Work() error {
 	host, err := os.Hostname()
 
 	// pass_by
-	passBy := map[string]map[string]string{}
-	for _, value := range this.Passby {
-		item := map[string]string{}
-		item[value.ConsumerGroup] = value.Topic
-		passBy[value.Cluster] = item
-	}
+	passBy := this.GetPassbyFilter()
 
 	var data []LogData
 	kafkaOffset, err := this.Worker.GetLastOffset()
@@ -84,8 +79,8 @@ func (this *Manager) Work() error {
 	msgLog := []string{}
 	for consumergroup, group := range zkOffset {
 		for topic, topicData := range group {
-			passbytopic, ok := passBy[this.ZkCluster][consumergroup]
-			if ok && passbytopic == topic {
+			passbyvalue, ok := passBy[this.ZkCluster][consumergroup][topic]
+			if ok && passbyvalue == 1 {
 				continue
 			}
 			for partition, offset := range topicData {
@@ -121,6 +116,27 @@ func (this *Manager) Work() error {
 
 func (this *Manager) Close() {
 	this.Worker.Close()
+}
+
+func (this *Manager) GetPassbyFilter() map[string]map[string]map[string]int {
+	passBy := map[string]map[string]map[string]int{}
+	for _, value := range this.Passby {
+		g, ok := passBy[value.Cluster]
+		if !ok {
+			g = map[string]map[string]int{}
+			passBy[value.Cluster] = g
+		}
+		t, ok := g[value.ConsumerGroup]
+		if !ok {
+			t = map[string]int{}
+			g[value.ConsumerGroup] = t
+		}
+		value, ok := t[value.Topic]
+		if !ok {
+			t[value.Topic] = 1
+		}
+	}
+	return passBy
 }
 
 func getGroupNameByUrl(url string) string {
