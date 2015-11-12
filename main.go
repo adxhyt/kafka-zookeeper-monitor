@@ -28,9 +28,9 @@ type LogData struct {
 
 func init() {
 	flag.StringVar(&configFile, "c", "config.json", "the config file")
-	flag.StringVar(&monitor_file, "f", "/home/work/kafka-monitor/log/kafka_offset_monitor", "the log path")
-	flag.StringVar(&logger_file, "l", "/home/work/kafka-monitor/log/kafka_offset_logger", "the runtime logger path")
-	flag.StringVar(&err_file, "err", "/home/work/kafka-monitor/log/kafka_offset_err", "the error logger path")
+	flag.StringVar(&monitor_file, "f", "/home/work/kafka-zookeeper-monitor/log/kafka_offset_monitor", "the log path")
+	flag.StringVar(&logger_file, "l", "/home/work/kafka-zookeeper-monitor/log/kafka_offset_logger", "the runtime logger path")
+	flag.StringVar(&err_file, "err", "/home/work/kafka-zookeeper-monitor/log/kafka_offset_err", "the error logger path")
 	flag.IntVar(&logger_switch, "sw", 0, "the logger switcher")
 	flag.IntVar(&http_time_out, "timeout", 3, "http default time out")
 }
